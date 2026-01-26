@@ -1,0 +1,79 @@
+"""
+LeetCode 217: Contains Duplicate
+
+Approach 1: HashSet
+-------------------
+Idea:
+Store elements in a set while traversing the array.
+If an element already exists in the set, a duplicate is found.
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+Approach 2: Sorting
+-------------------
+Idea:
+Sort the array so duplicates become adjacent, then compare neighbors.
+
+Time Complexity: O(n log n)
+Space Complexity: O(1)   # Extra space (ignoring sort internals)
+"""
+
+
+class Solution:
+    def containsDuplicate(self, nums):
+        """
+        LeetCode-compatible method (HashSet approach)
+
+        Time Complexity: O(n)
+        Space Complexity: O(n)
+        """
+        seen = set()
+        for num in nums:
+            if num in seen:
+                return True
+            seen.add(num)
+        return False
+
+
+# ---------------- Normal Coding Version ----------------
+
+def contains_duplicate(nums):
+    """
+    Normal Python function (HashSet approach)
+
+    Time Complexity: O(n)
+    Space Complexity: O(n)
+    """
+    seen = set()
+    for num in nums:
+        if num in seen:
+            return True
+        seen.add(num)
+    return False
+
+
+def contains_duplicate_sorting(nums):
+    """
+    Normal Python function (Sorting approach)
+
+    Time Complexity: O(n log n)
+    Space Complexity: O(1)
+    """
+    nums.sort()
+    for i in range(1, len(nums)):
+        if nums[i] == nums[i - 1]:
+            return True
+    return False
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    nums = [1, 2, 3, 1]
+
+    # LeetCode-style call
+    print("LeetCode Solution:", Solution().containsDuplicate(nums))
+
+    # Normal coding calls
+    print("Normal Function (HashSet):", contains_duplicate(nums))
+    print("Normal Function (Sorting):", contains_duplicate_sorting(nums))
