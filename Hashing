@@ -1,0 +1,108 @@
+"""
+LeetCode 242: Valid Anagram
+
+An anagram means both strings contain the same characters
+with the same frequency, but possibly in a different order.
+
+----------------------------------------------------------
+Approach 1: Sorting
+----------------------------------------------------------
+Idea:
+- Sort both strings
+- If sorted strings are equal, they are anagrams
+
+Time Complexity: O(n log n)
+Space Complexity: O(1)   # Extra space (interview-accepted)
+
+----------------------------------------------------------
+Approach 2: HashMap (Frequency Count) - OPTIMAL
+----------------------------------------------------------
+Idea:
+- Count frequency of characters in first string
+- Reduce frequency using second string
+- If all frequencies match, strings are anagrams
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+"""
+
+
+# ---------------- LeetCode Solution (HashMap - Optimal) ----------------
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+
+        # If lengths are different, they cannot be anagrams
+        if len(s) != len(t):
+            return False
+
+        # Dictionary to store character frequencies of string s
+        count = {}
+
+        # Count each character in string s
+        for char in s:
+            # If char exists, increase count
+            # Else initialize it with 0 and then add 1
+            count[char] = count.get(char, 0) + 1
+
+        # Reduce frequency using string t
+        for char in t:
+
+            # If character not found, t has extra character
+            if char not in count:
+                return False
+
+            # Decrease frequency for matched character
+            count[char] -= 1
+
+            # Remove character if frequency becomes zero
+            if count[char] == 0:
+                del count[char]
+
+        # If all characters matched correctly
+        return True
+
+
+# ---------------- Normal Coding Version (Sorting) ----------------
+def is_anagram_sorting(s, t):
+    # If lengths differ, not an anagram
+    if len(s) != len(t):
+        return False
+
+    # Sort both strings and compare
+    return sorted(s) == sorted(t)
+
+
+# ---------------- Normal Coding Version (HashMap) ----------------
+def is_anagram_hashmap(s, t):
+    # If lengths differ, not an anagram
+    if len(s) != len(t):
+        return False
+
+    count = {}
+
+    # Count characters in s
+    for char in s:
+        count[char] = count.get(char, 0) + 1
+
+    # Reduce count using t
+    for char in t:
+        if char not in count:
+            return False
+        count[char] -= 1
+        if count[char] == 0:
+            del count[char]
+
+    return True
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    s = "anagram"
+    t = "nagaram"
+
+    # LeetCode-style call
+    print("LeetCode Solution:", Solution().isAnagram(s, t))
+
+    # Normal coding calls
+    print("Sorting Method:", is_anagram_sorting(s, t))
+    print("HashMap Method:", is_anagram_hashmap(s, t))
