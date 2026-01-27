@@ -1,0 +1,109 @@
+"""
+LeetCode 1: Two Sum
+
+Given a list of numbers and a target value,
+return the indices of the two numbers such that
+they add up to the target.
+
+------------------------------------------------
+Approach 1: HashMap (Optimal)
+------------------------------------------------
+Idea:
+- Go through numbers one by one
+- For each number, calculate what number is needed
+- Check if that number was already seen
+- If yes, return indices
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+------------------------------------------------
+Approach 2: Sorting + Two Pointers
+------------------------------------------------
+Idea:
+- Store each number with its original index
+- Sort the list by number
+- Use two pointers (left and right)
+- Move pointers based on sum comparison
+
+Time Complexity: O(n log n)
+Space Complexity: O(1)  (extra space, interview-accepted)
+"""
+
+
+# ---------------- LeetCode Solution (HashMap) ----------------
+class Solution:
+    def twoSum(self, nums, target):
+
+        # Dictionary to store numbers we have already seen
+        # Key   -> number
+        # Value -> index of that number
+        seen = {}
+
+        # Loop through numbers with index
+        for i, num in enumerate(nums):
+
+            # Calculate the number needed to reach target
+            need = target - num
+
+            # If needed number already exists in dictionary
+            if need in seen:
+                # Return index of the needed number
+                # and index of current number
+                return [seen[need], i]
+
+            # Store current number and its index
+            seen[num] = i
+
+
+# ---------------- Sorting + Two Pointers ----------------
+def two_sum_sorting(nums, target):
+
+    # Create a list of (number, index) pairs
+    # This helps us remember original indices after sorting
+    nums_with_index = []
+
+    for i in range(len(nums)):
+        nums_with_index.append((nums[i], i))
+
+    # Sort the list based on numbers
+    nums_with_index.sort(key=lambda x: x[0])
+
+    # Left pointer at start
+    left = 0
+
+    # Right pointer at end
+    right = len(nums_with_index) - 1
+
+    # Continue until pointers meet
+    while left < right:
+
+        # Add numbers at left and right pointers
+        current_sum = nums_with_index[left][0] + nums_with_index[right][0]
+
+        # If sum equals target, return original indices
+        if current_sum == target:
+            return [
+                nums_with_index[left][1],
+                nums_with_index[right][1]
+            ]
+
+        # If sum is smaller than target, move left pointer right
+        elif current_sum < target:
+            left += 1
+
+        # If sum is greater than target, move right pointer left
+        else:
+            right -= 1
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    nums = [2, 7, 11, 15]
+    target = 9
+
+    # LeetCode-style call
+    print("HashMap:", Solution().twoSum(nums, target))
+
+    # Sorting approach call
+    print("Sorting:", two_sum_sorting(nums, target))
