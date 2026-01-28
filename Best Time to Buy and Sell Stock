@@ -1,0 +1,89 @@
+"""
+LeetCode 121: Best Time to Buy and Sell Stock
+
+You are given an array where each element represents the stock price on that day.
+You can buy once and sell once.
+You must buy before you sell.
+
+------------------------------------------------
+Approach 1: Brute Force (Slow)
+------------------------------------------------
+Idea:
+- Try every possible buy day
+- Try every possible sell day after buy
+- Calculate profit
+- Keep track of maximum profit
+
+Time Complexity: O(n^2)
+Space Complexity: O(1)
+
+------------------------------------------------
+Approach 2: One Pass (Optimal)
+------------------------------------------------
+Idea:
+- Track the minimum price seen so far
+- For each day, calculate profit if sold today
+- Update maximum profit
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+"""
+
+
+# ---------------- Brute Force Solution ----------------
+class Solution:
+    def maxProfit(self, prices):
+
+        # Variable to store maximum profit
+        max_profit = 0
+
+        # Loop for buying day
+        for i in range(len(prices)):
+
+            # Loop for selling day (must be after buying day)
+            for j in range(i + 1, len(prices)):
+
+                # Calculate profit
+                profit = prices[j] - prices[i]
+
+                # Update maximum profit if current profit is higher
+                if profit > max_profit:
+                    max_profit = profit
+
+        # Return the maximum profit found
+        return max_profit
+
+
+# ---------------- Optimal One-Pass Solution ----------------
+class Solution:
+    def maxProfit(self, prices):
+
+        # Store the minimum price seen so far
+        min_price = prices[0]
+
+        # Store the maximum profit
+        max_profit = 0
+
+        # Loop through prices starting from day 1
+        for price in prices:
+
+            # Update minimum price if a lower price is found
+            if price < min_price:
+                min_price = price
+
+            # Calculate profit if sold today
+            profit = price - min_price
+
+            # Update maximum profit if current profit is higher
+            if profit > max_profit:
+                max_profit = profit
+
+        # Return the maximum profit
+        return max_profit
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    prices = [7, 1, 5, 3, 6, 4]
+
+    print("Maximum Profit:", Solution().maxProfit(prices))
