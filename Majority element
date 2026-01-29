@@ -1,0 +1,61 @@
+"""
+LeetCode 169: Majority Element
+
+A majority element is the element that appears more than n/2 times.
+The problem guarantees that a majority element always exists.
+
+------------------------------------------------
+Approach 1: HashMap (Frequency Count)
+------------------------------------------------
+Idea:
+- Count how many times each number appears
+- Return the number whose count is greater than n/2
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+------------------------------------------------
+Approach 2: Boyer-Moore Voting Algorithm (OPTIMAL)
+------------------------------------------------
+Idea:
+- Treat elements as votes
+- Same elements increase count
+- Different elements cancel each other
+- Majority element survives till the end
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+"""
+
+
+# ---------------- LeetCode Solution (Optimal) ----------------
+class Solution:
+    def majorityElement(self, nums):
+
+        # Candidate for majority element
+        candidate = None
+
+        # Counter to track votes
+        count = 0
+
+        # Loop through each number in the array
+        for num in nums:
+
+            # If count becomes zero, choose new candidate
+            if count == 0:
+                candidate = num
+
+            # If current number is the same as candidate,
+            # increase the count (vote for it)
+            if num == candidate:
+                count += 1
+            else:
+                # Otherwise, decrease the count (cancel vote)
+                count -= 1
+
+        # Since majority element is guaranteed to exist,
+        # candidate will be the majority element
+        return candidate
+
+
+
