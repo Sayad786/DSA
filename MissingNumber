@@ -1,0 +1,79 @@
+"""
+LeetCode 268: Missing Number
+
+You are given an array containing n distinct numbers
+taken from the range 0 to n.
+Exactly one number is missing from the array.
+
+------------------------------------------------
+Approach 1: Math (Sum Formula)
+------------------------------------------------
+Idea:
+- Numbers should be from 0 to n
+- Sum of numbers from 0 to n is: n * (n + 1) // 2
+- Subtract the actual sum of array elements
+- The remaining value is the missing number
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+
+------------------------------------------------
+Approach 2: XOR (Optimal & Elegant)
+------------------------------------------------
+Idea:
+- XOR of same numbers cancels out (x ^ x = 0)
+- XOR all numbers from 0 to n
+- XOR all numbers in the array
+- The remaining value is the missing number
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+"""
+
+
+# ---------------- LeetCode Solution (Math / Sum Formula) ----------------
+class Solution:
+    def missingNumber(self, nums):
+
+        # n is the length of the array
+        n = len(nums)
+
+        # Expected sum of numbers from 0 to n
+        # Use // to avoid floating-point result
+        expected_sum = n * (n + 1) // 2
+
+        # Calculate actual sum of elements in the array
+        actual_sum = 0
+        for num in nums:
+            actual_sum += num
+
+        # The missing number is the difference
+        return expected_sum - actual_sum
+
+
+# ---------------- Normal Coding Version (XOR Method) ----------------
+def missing_number_xor(nums):
+
+    n = len(nums)
+
+    # Initialize result with n
+    result = n
+
+    # XOR all indices and values
+    for i in range(n):
+        result ^= i
+        result ^= nums[i]
+
+    # Remaining value is the missing number
+    return result
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    nums = [3, 0, 1]
+
+    # LeetCode-style call (Math approach)
+    print("Missing Number (Sum):", Solution().missingNumber(nums))
+
+    # Normal coding call (XOR approach)
+    print("Missing Number (XOR):", missing_number_xor(nums))
