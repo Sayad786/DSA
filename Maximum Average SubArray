@@ -1,0 +1,26 @@
+class Solution:
+    def findMaxAverage(self, nums, k):
+
+        # Step 1: Calculate the sum of the first window of size k
+        current_sum = 0
+        for i in range(k):
+            current_sum += nums[i]
+
+        # Step 2: Initialize maximum_sum with the first window sum
+        maximum_sum = current_sum
+
+        # Step 3: Slide the window from index k to end of array
+        for i in range(k, len(nums)):
+
+            # Add the new element entering the window
+            current_sum += nums[i]
+
+            # Subtract the element leaving the window
+            current_sum -= nums[i - k]
+
+            # Update maximum_sum if current window sum is larger
+            if current_sum > maximum_sum:
+                maximum_sum = current_sum
+
+        # Step 4: Return maximum average (divide at the end)
+        return maximum_sum / k
