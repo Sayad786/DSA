@@ -1,0 +1,61 @@
+"""
+LeetCode 1004: Max Consecutive Ones III
+
+Given a binary array (0s and 1s) and an integer k,
+you can flip at most k zeros to ones.
+
+Return the maximum number of consecutive 1s.
+
+------------------------------------------------
+Approach: Sliding Window (Variable Size)
+------------------------------------------------
+Idea:
+- Use a sliding window with two pointers (left, right)
+- Expand window by moving right pointer
+- Count how many zeros are inside the window
+- If zeros exceed k, shrink window from the left
+- Track the maximum window size
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+"""
+
+
+class Solution:
+    def longestOnes(self, nums, k):
+
+        # Left pointer of sliding window
+        left = 0
+
+        # Count of zeros in current window
+        zero_count = 0
+
+        # Store maximum length of valid window
+        max_length = 0
+
+        # Right pointer moves through the array
+        for right in range(len(nums)):
+
+            # If current element is 0, increase zero count
+            if nums[right] == 0:
+                zero_count += 1
+
+            # If zero count exceeds k, shrink window from left
+            while zero_count > k:
+                if nums[left] == 0:
+                    zero_count -= 1
+                left += 1
+
+            # Update maximum window length
+            max_length = max(max_length, right - left + 1)
+
+        return max_length
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    nums = [1,1,1,0,0,0,1,1,1,1,0]
+    k = 2
+
+    print("Max Consecutive Ones:", Solution().longestOnes(nums, k))
+
