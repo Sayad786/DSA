@@ -1,0 +1,65 @@
+"""
+LeetCode 904: Fruit Into Baskets
+
+You are given an array where each element represents a fruit type.
+You have two baskets and each basket can hold only one type of fruit.
+You must pick fruits from consecutive trees.
+
+Return the maximum number of fruits you can pick.
+
+------------------------------------------------
+Approach: Sliding Window (Variable Size)
+------------------------------------------------
+Idea:
+- Use two pointers (left and right)
+- Maintain a dictionary to count fruit types in the window
+- Expand window by moving right pointer
+- If number of distinct fruits > 2, shrink window from left
+- Track the maximum window size
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+"""
+
+
+class Solution:
+    def totalFruit(self, fruits):
+
+        # Dictionary to store count of each fruit type in window
+        basket = {}
+
+        # Left pointer of sliding window
+        left = 0
+
+        # Maximum number of fruits collected
+        max_fruits = 0
+
+        # Right pointer moves through the array
+        for right in range(len(fruits)):
+
+            # Add current fruit to basket
+            basket[fruits[right]] = basket.get(fruits[right], 0) + 1
+
+            # If more than 2 fruit types, shrink window
+            while len(basket) > 2:
+
+                # Reduce count of fruit at left pointer
+                basket[fruits[left]] -= 1
+
+                # Remove fruit type if count becomes zero
+                if basket[fruits[left]] == 0:
+                    del basket[fruits[left]]
+
+                # Move left pointer
+                left += 1
+
+            # Update maximum window size
+            max_fruits = max(max_fruits, right - left + 1)
+
+        return max_fruits
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    fruits = [1, 2, 3, 2, 2]
+    print("Max Fruits
