@@ -1,0 +1,67 @@
+"""
+LeetCode 567: Permutation in String
+
+Given two strings s1 and s2,
+return true if s2 contains a permutation of s1.
+
+------------------------------------------------
+Approach: Sliding Window + Frequency Count
+------------------------------------------------
+Idea:
+- Count frequency of characters in s1
+- Use a sliding window of size len(s1) on s2
+- Maintain frequency count of the current window
+- Slide window by adding right character and removing left
+- If both frequency maps match, permutation exists
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+"""
+
+
+class Solution:
+    def checkInclusion(self, s1, s2):
+
+        # If s1 is longer than s2, permutation is impossible
+        if len(s1) > len(s2):
+            return False
+
+        # Frequency count of characters in s1
+        freq_s1 = [0] * 26
+        for ch in s1:
+            freq_s1[ord(ch) - ord('a')] += 1
+
+        # Frequency count of current window in s2
+        freq_window = [0] * 26
+        window_size = len(s1)
+
+        # Build the first window
+        for i in range(window_size):
+            freq_window[ord(s2[i]) - ord('a')] += 1
+
+        # Check first window
+        if freq_window == freq_s1:
+            return True
+
+        # Slide the window
+        for right in range(window_size, len(s2)):
+
+            # Add new character to window
+            freq_window[ord(s2[right]) - ord('a')] += 1
+
+            # Remove character leaving the window
+            left = right - window_size
+            freq_window[ord(s2[left]) - ord('a')] -= 1
+
+            # Check if current window matches s1 frequency
+            if freq_window == freq_s1:
+                return True
+
+        return False
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    s1 = "ab"
+    s2 = "eidbaooo"
+    print("Permutation Exists:", Solution().checkInclusion(s1, s2))
