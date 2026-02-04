@@ -1,0 +1,70 @@
+"""
+LeetCode 438: Find All Anagrams in a String
+
+Given two strings s and p, return a list of all starting
+indices of p's anagrams in s.
+
+------------------------------------------------
+Approach: Sliding Window + Frequency Count
+------------------------------------------------
+Idea:
+- Count frequency of characters in p
+- Use a fixed-size sliding window of length len(p) on s
+- Maintain frequency of characters in current window
+- Slide window by adding right character and removing left
+- If both frequency arrays match, record the start index
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+"""
+
+
+class Solution:
+    def findAnagrams(self, s, p):
+
+        # Result list to store starting indices
+        result = []
+
+        # If p is longer than s, no anagrams possible
+        if len(p) > len(s):
+            return result
+
+        # Frequency count for p
+        freq_p = [0] * 26
+        for ch in p:
+            freq_p[ord(ch) - ord('a')] += 1
+
+        # Frequency count for current window in s
+        freq_window = [0] * 26
+        window_size = len(p)
+
+        # Build the first window
+        for i in range(window_size):
+            freq_window[ord(s[i]) - ord('a')] += 1
+
+        # Check first window
+        if freq_window == freq_p:
+            result.append(0)
+
+        # Slide the window across s
+        for right in range(window_size, len(s)):
+
+            # Add new character entering the window
+            freq_window[ord(s[right]) - ord('a')] += 1
+
+            # Remove character leaving the window
+            left = right - window_size
+            freq_window[ord(s[left]) - ord('a')] -= 1
+
+            # If frequency matches, record index
+            if freq_window == freq_p:
+                result.append(left + 1)
+
+        return result
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    s = "cbaebabacd"
+    p = "abc"
+    print("Anagram Indices:", Solution().findAnagrams(s, p))
