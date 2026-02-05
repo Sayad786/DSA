@@ -1,0 +1,87 @@
+"""
+LeetCode 76: Minimum Window Substring
+
+Given two strings s and t, return the minimum window substring
+of s such that every character in t (including duplicates)
+is included in the window.
+
+If no such substring exists, return an empty string.
+
+------------------------------------------------
+Approach: Sliding Window + Frequency Count
+------------------------------------------------
+Idea:
+- Count frequency of characters in t
+- Use two pointers (left and right) for sliding window
+- Expand window until all required characters are met
+- Shrink window while valid to minimize length
+- Track the smallest valid window
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+"""
+
+
+class Solution:
+    def minWindow(self, s, t):
+
+        # If t is longer than s, no valid window possible
+        if len(t) > len(s):
+            return ""
+
+        # Frequency map for t
+        freq_t = {}
+        for ch in t:
+            freq_t[ch] = freq_t.get(ch, 0) + 1
+
+        # Number of unique characters required
+        need = len(freq_t)
+
+        # Frequency map for current window
+        window = {}
+
+        # Number of characters that meet required frequency
+        have = 0
+
+        # Result window (length, left, right)
+        res = [-1, -1]
+        res_len = float('inf')
+
+        left = 0
+
+        # Expand window using right pointer
+        for right in range(len(s)):
+
+            char = s[right]
+            window[char] = window.get(char, 0) + 1
+
+            # Check if current character meets required frequency
+            if char in freq_t and window[char] == freq_t[char]:
+                have += 1
+
+            # Shrink window while it is valid
+            while have == need:
+
+                # Update result if smaller window is found
+                if (right - left + 1) < res_len:
+                    res = [left, right]
+                    res_len = right - left + 1
+
+                # Remove left character from window
+                window[s[left]] -= 1
+                if s[left] in freq_t and window[s[left]] < freq_t[s[left]]:
+                    have -= 1
+
+                left += 1
+
+        # Return result substring
+        left, right = res
+        return "" if res_len == float('inf') else s[left:right + 1]
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    s = "ADOBECODEBANC"
+    t = "ABC"
+    print("Minimum Window Substring:",
+          Solution().minWindow(s, t))
