@@ -1,0 +1,66 @@
+"""
+LeetCode 424: Longest Repeating Character Replacement
+
+Given a string s and an integer k, you can replace at most k characters
+to make all characters in a substring the same.
+
+Return the length of the longest possible substring.
+
+------------------------------------------------
+Approach: Sliding Window + Frequency Count
+------------------------------------------------
+Idea:
+- Use two pointers (left and right)
+- Maintain frequency of characters in current window
+- Track the maximum frequency of any character in the window
+- Window is valid if:
+      window_size - max_frequency <= k
+- Shrink window if condition breaks
+- Track the maximum window length
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+"""
+
+
+class Solution:
+    def characterReplacement(self, s, k):
+
+        # Frequency map for characters in current window
+        freq = {}
+
+        # Left pointer of sliding window
+        left = 0
+
+        # Maximum frequency of a single character in window
+        max_freq = 0
+
+        # Maximum length of valid window
+        max_length = 0
+
+        # Right pointer moves through the string
+        for right in range(len(s)):
+
+            # Add current character to frequency map
+            freq[s[right]] = freq.get(s[right], 0) + 1
+
+            # Update max frequency
+            max_freq = max(max_freq, freq[s[right]])
+
+            # If replacements needed exceed k, shrink window
+            while (right - left + 1) - max_freq > k:
+                freq[s[left]] -= 1
+                left += 1
+
+            # Update maximum window length
+            max_length = max(max_length, right - left + 1)
+
+        return max_length
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    s = "AABABBA"
+    k = 1
+    print("Longest Repeating Character Length:",
+          Solution().characterReplacement(s, k))
