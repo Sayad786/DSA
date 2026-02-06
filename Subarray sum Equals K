@@ -1,0 +1,49 @@
+"""
+LeetCode 560: Subarray Sum Equals K
+
+Given an array of integers and an integer k,
+return the total number of continuous subarrays
+whose sum equals k.
+
+------------------------------------------------
+Approach: Prefix Sum + HashMap
+------------------------------------------------
+Idea:
+- Use prefix sum to track cumulative sum
+- For each index, check if (current_sum - k)
+  has appeared before
+- Store frequency of prefix sums in a hashmap
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+"""
+
+
+class Solution:
+    def subarraySum(self, nums, k):
+
+        # Dictionary to store frequency of prefix sums
+        prefix_count = {0: 1}  # Important base case
+
+        current_sum = 0
+        count = 0
+
+        # Traverse through the array
+        for num in nums:
+            current_sum += num
+
+            # Check if (current_sum - k) exists
+            if (current_sum - k) in prefix_count:
+                count += prefix_count[current_sum - k]
+
+            # Store current prefix sum
+            prefix_count[current_sum] = prefix_count.get(current_sum, 0) + 1
+
+        return count
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    nums = [1, 1, 1]
+    k = 2
+    print("Subarray Count:", Solution().subarraySum(nums, k))
