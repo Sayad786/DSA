@@ -1,0 +1,53 @@
+"""
+LeetCode 525: Contiguous Array
+
+Given a binary array nums, return the maximum length
+of a contiguous subarray with an equal number of 0s and 1s.
+
+------------------------------------------------
+Approach: Prefix Sum + HashMap
+------------------------------------------------
+Idea:
+- Treat 0 as -1 and 1 as +1
+- Maintain a running prefix sum
+- If the same prefix sum appears again,
+  the subarray between those indices has sum = 0
+- Track the maximum length
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+"""
+
+
+class Solution:
+    def findMaxLength(self, nums):
+
+        # Dictionary to store first occurrence of prefix sum
+        prefix_index = {0: -1}  # base case
+
+        current_sum = 0
+        max_length = 0
+
+        for i, num in enumerate(nums):
+
+            # Convert 0 to -1, 1 stays as +1
+            if num == 0:
+                current_sum -= 1
+            else:
+                current_sum += 1
+
+            # If prefix sum seen before, update max length
+            if current_sum in prefix_index:
+                length = i - prefix_index[current_sum]
+                max_length = max(max_length, length)
+            else:
+                # Store first occurrence of this prefix sum
+                prefix_index[current_sum] = i
+
+        return max_length
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    nums = [0, 1, 0, 1, 1, 0, 0]
+    print("Max Length:", Solution().findMaxLength(nums))
