@@ -1,0 +1,51 @@
+"""
+LeetCode 1248: Count Number of Nice Subarrays
+
+Given an array of integers nums and an integer k,
+return the number of nice subarrays.
+
+A nice subarray is one that contains exactly k odd numbers.
+
+------------------------------------------------
+Approach: Prefix Sum + HashMap
+------------------------------------------------
+Idea:
+- Convert odd numbers to 1 and even numbers to 0
+- Problem becomes counting subarrays with sum = k
+- Use prefix sum and hashmap to count occurrences
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+"""
+
+
+class Solution:
+    def numberOfSubarrays(self, nums, k):
+
+        # Dictionary to store prefix sum frequencies
+        prefix_count = {0: 1}
+
+        current_sum = 0
+        result = 0
+
+        for num in nums:
+
+            # Convert odd to 1, even to 0
+            current_sum += num % 2
+
+            # Check if (current_sum - k) exists
+            if current_sum - k in prefix_count:
+                result += prefix_count[current_sum - k]
+
+            # Update prefix sum count
+            prefix_count[current_sum] = prefix_count.get(current_sum, 0) + 1
+
+        return result
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    nums = [1, 1, 2, 1, 1]
+    k = 3
+    print("Number of Nice Subarrays:",
+          Solution().numberOfSubarrays(nums, k))
