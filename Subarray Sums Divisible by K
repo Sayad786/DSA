@@ -1,0 +1,53 @@
+"""
+LeetCode 974: Subarray Sums Divisible by K
+
+Given an array of integers nums and an integer k,
+return the number of non-empty subarrays whose sum
+is divisible by k.
+
+------------------------------------------------
+Approach: Prefix Sum + Modulo + HashMap
+------------------------------------------------
+Idea:
+- Maintain running prefix sum
+- Compute remainder = prefix_sum % k
+- If same remainder appears again,
+  subarray sum between them is divisible by k
+- Count frequency of each remainder
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+"""
+
+
+class Solution:
+    def subarraysDivByK(self, nums, k):
+
+        # Dictionary to store count of remainders
+        remainder_count = {0: 1}  # base case
+
+        current_sum = 0
+        result = 0
+
+        for num in nums:
+            current_sum += num
+
+            # Compute remainder
+            remainder = current_sum % k
+
+            # If remainder seen before, add its count
+            if remainder in remainder_count:
+                result += remainder_count[remainder]
+
+            # Update remainder frequency
+            remainder_count[remainder] = remainder_count.get(remainder, 0) + 1
+
+        return result
+
+
+# ---------------- Local Testing ----------------
+if __name__ == "__main__":
+    nums = [4, 5, 0, -2, -3, 1]
+    k = 5
+    print("Subarrays Divisible by K:",
+          Solution().subarraysDivByK(nums, k))
